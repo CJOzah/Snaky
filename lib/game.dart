@@ -116,7 +116,7 @@ class _GamePageState extends State<GamePage> {
               style: TextStyle(color: Colors.white),
             ),
             actions: [
-              FlatButton(
+              TextButton(
                 onPressed: () async {
                   restart();
                   Navigator.of(context).pop();
@@ -211,32 +211,6 @@ class _GamePageState extends State<GamePage> {
     return ControlPanel(
       //1
       onTapped: (Direction newDirection) async {
-        // void _handleKeyEvent(RawKeyEvent event) {
-        //   setState(() {
-        //     if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-        //       newDirection = Direction.left;
-        //     } else {}
-        //   });
-        // }
-
-        // RawKeyboardListener(
-        //   focusNode: _focusNode,
-        //   onKey: _handleKeyEvent,
-        //   child: AnimatedBuilder(
-        //     animation: _focusNode,
-        //     builder: (BuildContext context, Widget child) {
-        //       if (!_focusNode.hasFocus) {
-        //         return GestureDetector(
-        //           onTap: () {
-        //             FocusScope.of(context).requestFocus(_focusNode);
-        //           },
-        //         );
-        //       }
-        //     },
-        //   ),
-        // );
-        //2
-
         if (direction.index == 0 && newDirection.index == 2) {
           if (timer != null && timer.isActive) timer.cancel();
           await Future.delayed(
@@ -325,24 +299,90 @@ class _GamePageState extends State<GamePage> {
     upperBoundY = roundToNearestTen(screenHeight.toInt() - step);
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color: Color(0XFF5BB00),
-          border: Border.all(
-            color: Colors.green.withOpacity(0.2),
-            style: BorderStyle.solid,
-            width: 8.0,
-          ),
-        ),
-        child: Stack(
-          children: [
-            Stack(
-              children: getPieces(),
+      body: GestureDetector(
+        onVerticalDragUpdate: (details) async {
+          int sen = 5;
+          Direction newDirection;
+
+          if (details.delta.dy < -sen) {
+            newDirection = Direction.up;
+            print(newDirection.index);
+          } else if (details.delta.dy > sen) {
+            newDirection = Direction.down;
+            print(newDirection.index);
+          }
+
+          if (direction.index == 0 && newDirection.index == 2) {
+            if (timer != null && timer.isActive) timer.cancel();
+            await Future.delayed(
+                Duration(milliseconds: 500), () => showGameOverDialog());
+          } else if (direction.index == 1 && newDirection.index == 3) {
+            if (timer != null && timer.isActive) timer.cancel();
+            await Future.delayed(
+                Duration(milliseconds: 500), () => showGameOverDialog());
+          } else if (direction.index == 2 && newDirection.index == 0) {
+            if (timer != null && timer.isActive) timer.cancel();
+            await Future.delayed(
+                Duration(milliseconds: 500), () => showGameOverDialog());
+          } else if (direction.index == 3 && newDirection.index == 1) {
+            if (timer != null && timer.isActive) timer.cancel();
+            await Future.delayed(
+                Duration(milliseconds: 500), () => showGameOverDialog());
+          } else
+            direction = newDirection; //3
+        },
+        onHorizontalDragUpdate: (
+          details,
+        ) async {
+          int sen = 8;
+          Direction newDirection;
+
+          if (details.delta.dx > sen) {
+            newDirection = Direction.right;
+            print(newDirection);
+          } else if (details.delta.dx < -sen) {
+            newDirection = Direction.left;
+            print(newDirection);
+          }
+
+          if (direction.index == 0 && newDirection.index == 2) {
+            if (timer != null && timer.isActive) timer.cancel();
+            await Future.delayed(
+                Duration(milliseconds: 500), () => showGameOverDialog());
+          } else if (direction.index == 1 && newDirection.index == 3) {
+            if (timer != null && timer.isActive) timer.cancel();
+            await Future.delayed(
+                Duration(milliseconds: 500), () => showGameOverDialog());
+          } else if (direction.index == 2 && newDirection.index == 0) {
+            if (timer != null && timer.isActive) timer.cancel();
+            await Future.delayed(
+                Duration(milliseconds: 500), () => showGameOverDialog());
+          } else if (direction.index == 3 && newDirection.index == 1) {
+            if (timer != null && timer.isActive) timer.cancel();
+            await Future.delayed(
+                Duration(milliseconds: 500), () => showGameOverDialog());
+          } else
+            direction = newDirection; //3
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Color(0XFF5BB00),
+            border: Border.all(
+              color: Colors.green.withOpacity(0.2),
+              style: BorderStyle.solid,
+              width: 8.0,
             ),
-            getControls(),
-            food,
-            getScore(),
-          ],
+          ),
+          child: Stack(
+            children: [
+              Stack(
+                children: getPieces(),
+              ),
+              // getControls(),
+              food,
+              getScore(),
+            ],
+          ),
         ),
       ),
     );

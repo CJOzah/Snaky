@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:snaky/game.dart';
 import 'game.dart';
 
 void main() {
@@ -15,7 +14,6 @@ ThemeData _appTheme() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
